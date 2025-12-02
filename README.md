@@ -10,6 +10,6 @@ Step 2 - Use 'iwconfig' (on linux) to ensure your device is detecting your wirel
 Step 3 - (If execution bit not set) chmod +x BlueS.py<br>
 Step 3 - Run as sudo/root<br>
 
-Options:<br>
+## Options
 -h OR --help       Help menu<br>
 -o <filename>      Save output as CSV on exit<br>
