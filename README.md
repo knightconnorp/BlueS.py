@@ -13,3 +13,8 @@ Step 3 - Run as sudo/root<br>
 ## Options
 -h OR --help       Help menu<br>
 -o <filename>      Save output as CSV on exit<br>
+
+## Dependencies
+- python3
+- bluepy
+- prettytable
