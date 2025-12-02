@@ -13,7 +13,7 @@ Step 3 - Run as sudo/root<br>
 ## Options
 -h OR --help         Help menu<br>
 -o <filename>        Save output as CSV on exit<br>
--n                   Must broadcast name of device>br>
+-n                   Must broadcast name of device<br>
 -c                   Must broadcast device manufacturer<br>
 -m <mac_address>     Hunt on a specific mac address, highlights in RED<br>
 -i <hci_interface>   Specify hci interface to use in scan<br>
