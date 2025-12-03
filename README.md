@@ -21,7 +21,6 @@ Step 3 - Run as sudo/root<br>
 ## Dependencies
 
 ```
-sudo apt-get update
 sudo apt-get install build-essential libglib2.0-dev python3 pip python3-dev
 pip install bluepy prettytable
 ```
