@@ -19,6 +19,9 @@ Step 3 - Run as sudo/root<br>
 -i <hci_interface>   Specify hci interface to use in scan<br>
 
 ## Dependencies
-- python3
-- bluepy
-- prettytable
+
+```
+sudo apt-get update
+sudo apt-get install build-essential libglib2.0-dev python3 pip python3-dev
+pip install bluepy prettytable
+```
