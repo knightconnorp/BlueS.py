@@ -5,6 +5,8 @@ from prettytable import PrettyTable
 from datetime import datetime
 import time, sys, csv, os
 
+RESET = '\033[0m'
+
 class ScanDelegate(DefaultDelegate):
     def __init__(self):
         DefaultDelegate.__init__(self)
@@ -53,13 +55,15 @@ def main():
 
     devices_dict = {}
 
+    os.system('clear')
+
     print("BlueS.py is starting BLE scan...")
     print("CTRL + C to exit")
     time.sleep(.5)
 
     try:
         while True:
-            devices = scanner.scan(5.0) # Scan for 5 seconds
+            devices = scanner.scan(1.5) # Scan for 5 seconds
 
             # Clear the table and update it with new data
             table.clear_rows()
@@ -69,25 +73,22 @@ def main():
 
                 # highlight for hunting on specific mac address
                 if only_mac == True and dev.addr == search_mac:
-                    addr = "\033[31m" + dev.addr + "\033[0m"
-                    tmpname = dev.getValueText(9) or 'N/A'
-                    name = "\033[31m" + tmpname + "\033[0m"
-                    tmpcompany = manufacturer_info(str(dev.getValueText(255))) or 'N/A'
-                    company = "\033[31m" + tmpcompany + "\033[0m"
+                    addr = "\033[31m" + dev.addr
+                    last = dev.last + RESET
 
                 else:
                     addr = dev.addr
-                    name = dev.getValueText(9) or 'N/A'
-                    company = manufacturer_info(str(dev.getValueText(255))) or 'N/A'
+                    last = dev.last
 
                 rssi = dev.rssi
-                last = dev.last
-        
+                name = dev.getValueText(9) or 'N/A'
+                company = manufacturer_info(str(dev.getValueText(255))) or 'N/A'
+
                 # if device in dictionary, update RSSI, last seen, and RSSI High
                 if addr in devices_dict:
                     devices_dict[addr]["RSSI"] = rssi
                     devices_dict[addr]["Last Seen"] = last
-                    
+                 
                     # if RSSI high is less than current RSSI, update
                     if devices_dict[addr]["RSSI High"] < rssi:
                         devices_dict[addr]["RSSI High"] = rssi
@@ -114,6 +115,7 @@ def main():
 
             time.sleep(.1)
     except:
+        os.system('clear')
         if out:
             csv_table = table.get_csv_string()
             print("\nSaving table as CSV...")
@@ -155,33 +157,41 @@ if __name__ == '__main__':
         print("-n                   must broadcast name of device")
         print("-c                   must broadcast device manufacturer data")
         print("-m <mac_address>     hunt on a specific mac address")
-        print("-i <hci_interface>   specify hci interface to use")
+        print("-i <hci>             specify hci (default: hci0)")
         print("---------------------------------------------------")
     else:
-        args = sys.argv[1:]
-        for i, arg in enumerate(args):
-            if arg == "-o":
-                out = True
-                if sys.argv[i+2]:
-                    out_file = sys.argv[i+2]
-                else:
-                    print("Must give output filename with -o")
-                    sys.exit()
-            if arg == "-n":
-                only_name = True
-            if arg == "-c":
-                only_company = True
-            if arg == "-m":
-                only_mac = True
-                if sys.argv[i+2]:
-                    search_mac = sys.argv[i+2]
-                else:
-                    print("Must give mac address to search for")
-                    sys.exit()
-            if arg == "-i":
-                if sys.argv[i+2]:
-                    hci = sys.argv[i+2]
-                else:
-                    print("Must specify hci interface to use")
-                    sys.exit()
-        main()
+        try:
+            args = sys.argv[1:]
+            for i, arg in enumerate(args):
+                if arg == "-o":
+                    out = True
+                    if sys.argv[i+2]:
+                        out_file = sys.argv[i+2]
+                    else:
+                        print("Must give output filename with -o")
+                        sys.exit()
+                if arg == "-n":
+                    only_name = True
+                if arg == "-c":
+                    only_company = True
+                if arg == "-m":
+                    if only_mac == True:
+                        print("Can only use -m OR -mh, not both")
+                        sys.exit()
+                    elif only_mac == False:
+                        only_mac = True
+                    if sys.argv[i+2]:
+                        search_mac = sys.argv[i+2]
+                    else:
+                        print("Must give mac address to search for")
+                        sys.exit()
+                if arg == "-i":
+                    select_hci == True
+                    if sys.argv[i+2]:
+                        hci = sys.argv[i+2]
+                    else:
+                        print("Must specify hci interface to use")
+                        sys.exit()
+            main()
+        except:
+            print("error happen")
