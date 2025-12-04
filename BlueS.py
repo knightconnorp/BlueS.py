@@ -38,7 +38,7 @@ def clear_and_print(text):
     print("\x1b[2J\x1b[H", end="", flush=True)
     print(text, end="", flush=True)
 
-def main():
+def main(scantime):
     # Create a PrettyTable instance
     table = PrettyTable()
     table.field_names = ["Device Address", "RSSI (dBm)", "RSSI High", "Device Name", "Company", "Last Seen"]
@@ -60,7 +60,7 @@ def main():
 
     try:
         while True:
-            devices = scanner.scan(1.5) # Scan for 5 seconds
+            devices = scanner.scan(scantime) # Scan for 5 seconds
 
             # Clear the table and update it with new data
             table.clear_rows()
@@ -141,6 +141,7 @@ if __name__ == '__main__':
     only_company = False
     only_mac = False
     select_hci = False
+    scan_time = 3.0
 
     if len(sys.argv) < 2:
         main()
@@ -161,6 +162,7 @@ if __name__ == '__main__':
         print("-c                   must broadcast device manufacturer data")
         print("-m <mac_address>     hunt on a specific mac address")
         print("-i <hci>             specify hci (default: hci0)")
+        print("-s <scan_time>       specify custom scan time")
         print("---------------------------------------------------")
     else:
         try:
@@ -195,6 +197,12 @@ if __name__ == '__main__':
                     else:
                         print("Must specify hci interface to use")
                         sys.exit()
-            main()
+                if arg == "-s":
+                    if sys.argv[i+2]:
+                        scan_time = float(sys.argv[i+2])
+                    else:
+                        print("Must give scan time")
+                        sys.exit()
+            main(scan_time)
         except:
             print("Error happen with options")
