@@ -144,7 +144,7 @@ if __name__ == '__main__':
     scan_time = 3.0
 
     if len(sys.argv) < 2:
-        main()
+        main(scan_time)
     elif sys.argv[1] == "-h" or sys.argv[1] == "--help":
         print("---------------------------------------------------")
         print("BlueS.py - Bluetooth Low Eenrgy (BLE) Sniffer")
