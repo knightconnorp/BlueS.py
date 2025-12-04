@@ -142,6 +142,7 @@ if __name__ == '__main__':
     only_mac = False
     select_hci = False
     scan_time = 3.0
+    error_arg = ""
 
     if len(sys.argv) < 2:
         main(scan_time)
@@ -158,51 +159,44 @@ if __name__ == '__main__':
         print("---------------------------------------------------")
         print("-h OR --help         this menu")
         print("-o <filename>        output as CSV on exit")
-        print("-n                   must broadcast name of device")
-        print("-c                   must broadcast device manufacturer data")
         print("-m <mac_address>     hunt on a specific mac address")
         print("-i <hci>             specify hci (default: hci0)")
         print("-s <scan_time>       specify custom scan time")
+        print("-n                   must broadcast name of device")
+        print("-c                   must broadcast device manufacturer data")
         print("---------------------------------------------------")
     else:
         try:
             args = sys.argv[1:]
             for i, arg in enumerate(args):
+                error_arg = arg
                 if arg == "-o":
                     out = True
                     if sys.argv[i+2]:
                         out_file = sys.argv[i+2]
-                    else:
-                        print("Must give output filename with -o")
-                        sys.exit()
                 if arg == "-n":
                     only_name = True
                 if arg == "-c":
                     only_company = True
                 if arg == "-m":
-                    if only_mac == True:
-                        print("Can only use -m OR -mh, not both")
-                        sys.exit()
-                    elif only_mac == False:
-                        only_mac = True
+                    only_mac = True
                     if sys.argv[i+2]:
                         search_mac = sys.argv[i+2]
-                    else:
-                        print("Must give mac address to search for")
-                        sys.exit()
                 if arg == "-i":
                     select_hci == True
                     if sys.argv[i+2]:
                         hci = sys.argv[i+2]
-                    else:
-                        print("Must specify hci interface to use")
-                        sys.exit()
                 if arg == "-s":
                     if sys.argv[i+2]:
                         scan_time = float(sys.argv[i+2])
-                    else:
-                        print("Must give scan time")
-                        sys.exit()
             main(scan_time)
-        except:
-            print("Error happen with options")
+        except(IndexError, ValueError):
+            if error_arg == "-o":
+                print("Must give output filename with -o (Ex: output.csv)")
+            if error_arg == "-m":
+                print("Must give mac address to search for (Ex: 00:1A:2B:3C:4D:5E)")
+            if error_arg == "-i":
+                print("Must specify hci interface to use (Ex: hci1)")
+            if error_arg == "-s":
+                print("Must give scan time (Ex: 4 or 6.5)")
+            sys.exit()
