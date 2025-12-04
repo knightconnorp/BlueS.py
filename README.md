@@ -17,6 +17,7 @@ Step 4 - Run as sudo/root<br>
 -c                   Must broadcast device manufacturer<br>
 -m <mac_address>     Hunt on a specific mac address, highlights in RED<br>
 -i <hci_interface>   Specify hci interface to use in scan<br>
+-s <scan_length>     Specify scan length in seconds
 
 ## Dependencies
 
