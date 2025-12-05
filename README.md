@@ -20,8 +20,8 @@ Step 4 - Run as sudo/root<br>
 -s <scan_length>     Specify scan length in seconds
 
 ## Dependencies
-> sudo apt-get install build-essential libglib2.0-dev python3 pip python3-dev
-> pip install bluepy prettytable
+> sudo apt-get install build-essential libglib2.0-dev python3 pip python3-dev<br>
+> pip install bluepy prettytable<br>
 
 ![Screenshot of BlueS.py running](/BlueSpy0.png)
 ![Screenshot of BlueS.py running](/BlueSpy1.png)
